@@ -1,6 +1,8 @@
 # netcup DDNS updater container
 This helper updates your netcup domain with current IPv4/6 IPs. It has support for dynmaic prefixes and only updates the prefix.
 
+You can find the image at https://hub.docker.com/r/rkluth/netcup-docker-dns
+
 ## Environment variables
 * `NC_KD` netcup customer number
 * `NC_APIPW` netcup API password

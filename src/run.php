@@ -130,7 +130,7 @@ foreach ($dnsRecordSet->dnsrecords as $dnsrecord) {
         if ($dnsrecord->destination == $newIP || empty($newIP)) {
             _log("No need to update - same IP!");
         } elseif(!empty($newIP)) {
-            _log( "Update $dnsrecord->type to $dnsrecord->destination");
+            _log( "Update $dnsrecord->type to $newIP");
             $dnsrecord->destination = $newIP;
             $toUpdateRecords[]      = $dnsrecord;
         } else {

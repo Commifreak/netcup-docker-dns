@@ -37,6 +37,7 @@ foreach ($identSvcs as $identSvc) {
 
     if (!$res) {
         _log("Error contacting $identSvc");
+        sleep(5);
         continue;
     }
 
@@ -103,9 +104,17 @@ foreach ($dnsRecordSet->dnsrecords as $dnsrecord) {
 
         switch ($dnsrecord->type) {
             case 'A':
+                if(empty($myIP4)) {
+                    _log("Skipping v4 update: no new v4 address found!");
+                    break;
+                }
                 $newIP = $myIP4;
                 break;
             case 'AAAA':
+                if(empty($myIP6)) {
+                    _log("Skipping v6 update: no new v6 address found!");
+                    break;
+                }
                 if (getenv("NC_UPDATE_IP6_PREFIX") == 'true') {
                     _log("Only updating v6 prefix!");
                     $prefix_old    = explode(":", $dnsrecord->destination, 5);
@@ -120,10 +129,12 @@ foreach ($dnsRecordSet->dnsrecords as $dnsrecord) {
         }
         if ($dnsrecord->destination == $newIP || empty($newIP)) {
             _log("No need to update - same IP!");
-        } else {
+        } elseif(!empty($newIP)) {
             _log( "Update $dnsrecord->type to $dnsrecord->destination");
             $dnsrecord->destination = $newIP;
             $toUpdateRecords[]      = $dnsrecord;
+        } else {
+            _log("Update for $dnsrecord->hostname failed!");
         }
     } else {
         _log("Ignoring $dnsrecord->hostname: not in list!");

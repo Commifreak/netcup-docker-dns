@@ -33,6 +33,8 @@ _log("Configured entries to update: ".implode(", ", $domainlist));
 foreach ($identSvcs as $identSvc) {
     $ch = curl_init($identSvc);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
     $res = curl_exec($ch);
 
     if (!$res) {
